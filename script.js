@@ -7,6 +7,11 @@ window.onload = function() {
 function startGame() {
 console.log("Game started");
 let cookieGame = new CanvasGame(900,700);
+let monster = new MovingMonster(cookieGame.ctx);
+console.log(monster.img);
+monster.draw();
+
+
 }
 
 
@@ -21,7 +26,47 @@ class CanvasGame {
         this.canvas.style.backgroundRepeat = "no-repeat";
         this.canvas.style.backgroundSize = "900px 700px";
         document.getElementById("game-board").appendChild(this.canvas);
+        //this.updateCanvas = this.updateCanvas.bind(this);
+        //this.intervall = setInterval(this.updateCanvas, 50);
+        //this.monster = new MovingMonster(this.ctx);
+    }
+    updateCanvas() {
+        //this.monster.draw();
+
     }
 }
 
+
+class MovingObjects {
+    constructor(xPosition, yPosition, ctx, width, height) {
+        this.ctx = ctx;
+        this.height = height;
+        this.width = width;
+        this.xPosition = xPosition;
+        this.yPosition = yPosition;
+        this.ySpeed = 0;
+        this.xSpeed = 0;
+       // this.img = new Image();
+       // this.img.src = "pictures/cookiemonster_player.png";
+       // this.img.onload = () => {
+       // this.ctx.drawImage(this.img, this.xPosition, this.yPosition, this.width, this.height)
+    //}
+}
+}
+
+
+class MovingMonster extends MovingObjects {
+    constructor( ctx ){
+        super(450, 570, ctx, 80, 90);
+        this.img = new Image();
+        this.img.src = "pictures/cookiemonster_player.png";
+        
+    }
+
+    draw (){
+        this.img.onload = () => {
+            this.ctx.drawImage(this.img, this.xPosition, this.yPosition, this.width, this.height)
+        }
+}
+}
 
