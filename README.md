@@ -24,6 +24,7 @@ Wenn es vorher von einem Gemüse getroffen wird, dann ist das Spiel vorbei und v
 
 4. Intro-Webseite
 Dem Spieler wird eine Webseite mit einem Startbutton angezeigt um das Spiel starten zu können
+Inklusive Logo
 
 5. Fußnoten
 
