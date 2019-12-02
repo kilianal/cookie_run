@@ -22,5 +22,8 @@ Wenn es vorher von einem Gemüse getroffen wird, dann ist das Spiel vorbei und v
 - Score: Entspricht den eingesammelten Cookies
 - Add-on(wenn die Zeit noch reicht) Bonus-Score: Wenn fast alle Cookies eingesammelt wurden, dann wird ein spezielles Image angezeigt (extra-vollgefressenes Cookiemonster) 
 
+4. Intro-Webseite
+Dem Spieler wird eine Webseite mit einem Startbutton angezeigt um das Spiel starten zu können
+
 
 
