@@ -46,11 +46,7 @@ class MovingObjects {
         this.yPosition = yPosition;
         this.ySpeed = 0;
         this.xSpeed = 0;
-       // this.img = new Image();
-       // this.img.src = "pictures/cookiemonster_player.png";
-       // this.img.onload = () => {
-       // this.ctx.drawImage(this.img, this.xPosition, this.yPosition, this.width, this.height)
-    //}
+      
 }
 }
 
