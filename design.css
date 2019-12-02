@@ -43,6 +43,8 @@ h1{
 
 
 
+
+
 /* Button Styling mit Hover Effekt
 */
 #start-game {
@@ -69,7 +71,7 @@ h1{
   }
 
   #game-board {
-      margin-top: 20px;
+      margin-top: 20px;      
       
   }
 
