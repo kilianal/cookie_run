@@ -7,8 +7,8 @@ window.onload = function() {
 function startGame() {
   console.log("Game started");
   let cookieGame = new CanvasGame(900, 700);
-  let interaction = new InteractionManual(200, 700);
-  let scoreDisplay = new ScoreDisplay(200, 700);
+  let interaction = new InteractionManual(300, 700);
+  let scoreDisplay = new ScoreDisplay(300, 700);
 }
 
 //Beschreibung für den Nutzer wie das Spiel gespielt werden muss
@@ -50,17 +50,42 @@ class CanvasGame {
     this.canvas.style.marginRight = "10px";
     this.canvas.style.marginLeft = "10px";
     document.getElementById("game-board").appendChild(this.canvas);
+    //Animation der Bewegung
+    this.frames = 0;
     this.updateGameState = this.updateGameState.bind(this);
-    this.intervall = setInterval(this.updateGameState, 30);
+    this.interval = setInterval(this.updateGameState, 30);
+    this.gamesObjects = [];
     this.monster = new MovingMonster(this.ctx);
+    
   }
   updateGameState() {
     this.clearCanvas();
-    this.monster.updateMonster();
+    this.frames += 1;
+    this.monster.update();
     this.monster.draw();
+    if (this.frames % 100 === 0){
+        this.addFruits();
+        console.log(this.gamesObjects);
+    }
+    this.gamesObjects.forEach(function(gameObject) {
+        gameObject.update();
+    });
+
   }
   clearCanvas() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    
+  }
+  addFruits(){
+    this.gamesObjects.push(this.fruit = new MovingFruits(this.ctx));
+  }
+
+  checkGameOver(){
+
+  }
+
+  stopGame(){
+    clearInterval(this.interval);
   }
 }
 
@@ -104,8 +129,8 @@ class MovingMonster extends MovingObjects {
       }
     };
   }
-
-  updateMonster() {
+  //MonsterUpdate Methode lässt Monster springen, nach rechts und links bewegen ohne das Spielfeld zu verlassen
+  update() { 
     this.xPosition += this.xSpeed;
     this.yPosition += this.ySpeed;
     if (this.yPosition <= 240) {
@@ -134,3 +159,21 @@ class MovingMonster extends MovingObjects {
     );
   }
 }
+
+class MovingFruits extends MovingObjects {
+    constructor(ctx){
+        super(ctx.canvas.width, 570, ctx, 50, 50 );
+
+        this.color = "orange";
+        this.xSpeed = -10;
+
+    }
+    //fruitsUpdate
+    update(){
+        this.xPosition += this.xSpeed;
+        this.ctx.fillStyle = this.color;
+        this.ctx.fillRect(this.xPosition, this.yPosition, this.width, this.height);
+    }
+}
+
+
