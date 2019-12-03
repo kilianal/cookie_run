@@ -9,10 +9,18 @@ body{
     background-color: #b1bcc9;
     
 }
+
+section{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+}
+
 #cookie{
     width: 310px;
     height: 310px;
-    margin-bottom: -10px;
+    margin-bottom: 30px;
 }
 
 h1{
