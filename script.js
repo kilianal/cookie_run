@@ -122,7 +122,7 @@ class MovingMonster extends MovingObjects {
             this.yPosition+=this.ySpeed
                        
         }
-        if(this.yPosition==570){
+        if(this.yPosition>=570){
             this.yPosition=570;
             this.ySpeed=0;
         } 
