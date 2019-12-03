@@ -26,14 +26,18 @@ class CanvasGame {
         this.canvas.style.backgroundRepeat = "no-repeat";
         this.canvas.style.backgroundSize = "900px 700px";
         document.getElementById("game-board").appendChild(this.canvas);
+        
+        
         //this.updateCanvas = this.updateCanvas.bind(this);
         //this.intervall = setInterval(this.updateCanvas, 50);
         //this.monster = new MovingMonster(this.ctx);
     }
-    updateCanvas() {
-        //this.monster.draw();
-
+    updateGameState() {
+       
     }
+    clearCanvas(){
+        
+}
 }
 
 
@@ -52,6 +56,11 @@ class MovingObjects {
        // this.ctx.drawImage(this.img, this.xPosition, this.yPosition, this.width, this.height)
     //}
 }
+updateMonster(){
+    
+    
+}
+
 }
 
 
