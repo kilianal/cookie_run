@@ -9,12 +9,10 @@ console.log("Game started");
 let cookieGame = new CanvasGame(900,700);
 let interaction = new InteractionManual (200,700);
 let scoreDisplay = new ScoreDisplay(200,700);
-let monster = new MovingMonster(cookieGame.ctx);
-console.log(monster.img);
-monster.draw();
-
 }
 
+
+//Beschreibung für den Nutzer wie das Spiel gespielt werden muss
 class InteractionManual {
     constructor(width,height) {
         this.canvas = document.createElement("canvas");
@@ -26,6 +24,8 @@ class InteractionManual {
 }
 }
 
+
+//Anzeige der gesammelten Punkte
 class ScoreDisplay {
     constructor(width,height) {
         this.canvas = document.createElement("canvas");
@@ -37,6 +37,8 @@ class ScoreDisplay {
 }
 }
 
+
+//Hier fangen die Klassen für das Cookiemonsterspiel an
 class CanvasGame {
     constructor(width,height) {
         this.canvas = document.createElement("canvas");
@@ -50,21 +52,23 @@ class CanvasGame {
         this.canvas.style.marginRight = "10px";
         this.canvas.style.marginLeft = "10px";
         document.getElementById("game-board").appendChild(this.canvas);
-        
-        
-        //this.updateCanvas = this.updateCanvas.bind(this);
-        //this.intervall = setInterval(this.updateCanvas, 50);
-        //this.monster = new MovingMonster(this.ctx);
+        this.updateGameState = this.updateGameState.bind(this);
+        this.intervall = setInterval(this.updateGameState, 10);
+        this.monster = new MovingMonster(this.ctx);
+        this.monster.draw();
     }
     updateGameState() {
-       
+        
+        this.clearCanvas();
+        this.monster.updateMonster();
+        this.monster.draw();
     }
     clearCanvas(){
-        
+        this.ctx.clearRect(0,0,this.canvas.width, this.canvas.height);
 }
 }
 
-
+//Klasse für die bewegenden Objekte
 class MovingObjects {
     constructor(xPosition, yPosition, ctx, width, height) {
         this.ctx = ctx;
@@ -76,26 +80,53 @@ class MovingObjects {
         this.xSpeed = 0;
       
 }
-updateMonster(){
-    
-    
-}
+
 
 }
 
 
+//Klasse für den Spieler, der sich bewegt
 class MovingMonster extends MovingObjects {
     constructor( ctx ){
         super(450, 570, ctx, 80, 90);
         this.img = new Image();
         this.img.src = "pictures/cookiemonster_player.png";
+        document.onkeydown = e => {
+             switch (e.keyCode) {
+              case 37:
+                this.xSpeed -= 1;
+                break;
+              case 39:
+              //this.speedX+=5, damit er sich beim springen schneller nach vorne bewegt
+                this.xSpeed += 1;
+                break;
+              //damit er springt
+              case 32:
+                this.yPosition-=280;
+                break;
+              default:
+            }
+            
+          };
+          document.onkeyup = e => {
+            this.xSpeed = 0;
+                     
+            this.yPosition=570;
+            
+            
+          };
+    }
+
+    updateMonster(){
+        this.xPosition+=this.xSpeed;
+        this.yPosition+=this.ySpeed;
         
     }
 
     draw (){
-        this.img.onload = () => {
-            this.ctx.drawImage(this.img, this.xPosition, this.yPosition, this.width, this.height)
-        }
+        
+        this.ctx.drawImage(this.img, this.xPosition, this.yPosition, this.width, this.height)
+        
 }
 }
 
