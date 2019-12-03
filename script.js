@@ -50,7 +50,8 @@ class CanvasGame {
     this.canvas.style.marginRight = "10px";
     this.canvas.style.marginLeft = "10px";
     document.getElementById("game-board").appendChild(this.canvas);
-    
+    this.bild =new Image();
+    this.bild.src="pictures/cookie2.png";
     //Animation der Bewegung
     this.frames = 0;
     this.updateGameState = this.updateGameState.bind(this);
@@ -106,10 +107,12 @@ class CanvasGame {
     /*Damit die Schrift nicht auch Transparent wird muss hier nochmal die Farbe 
     und die Transparenz wieder auf 1 gesetzt werden
     */
+    this.ctx.drawImage(this.bild, 110,215, 85,85);
     this.ctx.font="100px Permanent Marker";
     this.ctx.fillStyle="orange";
     this.ctx.globalAlpha=1;
-    this.ctx.fillText("Game Over", (this.canvas.width/2-260), 300)
+    this.ctx.fillText("Game Over", (this.canvas.width/2-230), 300);
+    
 
   }
 }
