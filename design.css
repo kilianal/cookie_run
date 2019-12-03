@@ -20,7 +20,7 @@ section{
 #cookie{
     width: 310px;
     height: 310px;
-    margin-bottom: 30px;
+    margin-bottom: -10px;
 }
 
 h1{
