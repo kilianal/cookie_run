@@ -53,9 +53,9 @@ class CanvasGame {
         this.canvas.style.marginLeft = "10px";
         document.getElementById("game-board").appendChild(this.canvas);
         this.updateGameState = this.updateGameState.bind(this);
-        this.intervall = setInterval(this.updateGameState, 10);
+        this.intervall = setInterval(this.updateGameState, 30);
         this.monster = new MovingMonster(this.ctx);
-        this.monster.draw();
+        
     }
     updateGameState() {
         
@@ -94,24 +94,21 @@ class MovingMonster extends MovingObjects {
         document.onkeydown = e => {
              switch (e.keyCode) {
               case 37:
-                this.xSpeed -= 1;
+                this.xSpeed -= 3;
                 break;
               case 39:
-              //this.speedX+=5, damit er sich beim springen schneller nach vorne bewegt
-                this.xSpeed += 1;
+              this.xSpeed += 3;
                 break;
-              //damit er springt
               case 32:
-                this.yPosition-=280;
-                break;
+              this.ySpeed-=15; 
+              break;
               default:
             }
-            
           };
           document.onkeyup = e => {
             this.xSpeed = 0;
-                     
-            this.yPosition=570;
+            this.ySpeed=15;
+            
             
             
           };
@@ -120,13 +117,27 @@ class MovingMonster extends MovingObjects {
     updateMonster(){
         this.xPosition+=this.xSpeed;
         this.yPosition+=this.ySpeed;
-        
+        if(this.yPosition<=285){
+            this.ySpeed=15;
+            this.yPosition+=this.ySpeed
+                       
+        }
+        if(this.yPosition==570){
+            this.yPosition=570;
+            this.ySpeed=0;
+        } 
+        if(this.xPosition<=0){
+           this.xPosition+=10;
+        }  
+        if(this.xPosition>=820){
+            this.xPosition-=10;
+        }
     }
 
     draw (){
         
         this.ctx.drawImage(this.img, this.xPosition, this.yPosition, this.width, this.height)
-        
+         
 }
 }
 
