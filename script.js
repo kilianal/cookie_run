@@ -61,7 +61,7 @@ class CanvasGame {
         
         this.clearCanvas();
         this.monster.updateMonster();
-        this.monster.draw();
+        this.monster.draw(); 
     }
     clearCanvas(){
         this.ctx.clearRect(0,0,this.canvas.width, this.canvas.height);
@@ -107,8 +107,8 @@ class MovingMonster extends MovingObjects {
           };
           document.onkeyup = e => {
             this.xSpeed = 0;
-            this.ySpeed=15;
-            
+            //this.ySpeed=15;
+
             
             
           };
