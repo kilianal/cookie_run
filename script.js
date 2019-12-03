@@ -56,13 +56,14 @@ class CanvasGame {
     this.interval = setInterval(this.updateGameState, 30);
     this.gamesObjects = [];
     this.monster = new MovingMonster(this.ctx);
-    
+    this.gamesObjects.push(this.monster);
+     
   }
+
   updateGameState() {
+    
     this.clearCanvas();
-    this.frames += 1;
-    this.monster.update();
-    this.monster.draw();
+    this.frames += 1;    
     if (this.frames % 100 === 0){
         this.addFruits();
         console.log(this.gamesObjects);
@@ -71,21 +72,29 @@ class CanvasGame {
         gameObject.update();
     });
 
+    this.checkGameOver();
   }
+
   clearCanvas() {
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); 
   }
+
   addFruits(){
     this.gamesObjects.push(this.fruit = new MovingFruits(this.ctx));
   }
 
   checkGameOver(){
+      let crashed = this.gamesObjects.some(object => {
+          return this.monster.isCollidedWith(object);
+      });
+     
+      if (crashed) this.stopGame();
 
   }
 
   stopGame(){
     clearInterval(this.interval);
+    alert("Game Over!")
   }
 }
 
@@ -99,6 +108,35 @@ class MovingObjects {
     this.yPosition = yPosition;
     this.ySpeed = 0;
     this.xSpeed = 0;
+  }
+  left(){
+      return this.xPosition;
+  }
+  right(){
+      return this.xPosition+this.width;
+  }
+  top(){
+      return this.yPosition;
+  }
+  bottom(){
+      return this.yPosition+this.height;
+  }
+
+  isCollidedWith(object){
+    // if (this.right()> object.left() &&
+    //     this.left() < object.right() &&
+    //     this.top() < object.bottom() &&
+    //     this.bottom() > object.top())
+    //     return true;
+
+      if (this === object) return false;
+      return!(
+          this.bottom()-10 < object.top() ||
+          this.top() > object.bottom() ||
+          this.left() > object.right() ||
+          this.right() < object.left()
+      );
+   
   }
 }
 
@@ -147,6 +185,7 @@ class MovingMonster extends MovingObjects {
     if (this.xPosition >= 820) {
       this.xPosition = 815;
     }
+    this.draw();
   }
 
   draw() {
@@ -175,5 +214,6 @@ class MovingFruits extends MovingObjects {
         this.ctx.fillRect(this.xPosition, this.yPosition, this.width, this.height);
     }
 }
+
 
 
