@@ -50,6 +50,7 @@ class CanvasGame {
     this.canvas.style.marginRight = "10px";
     this.canvas.style.marginLeft = "10px";
     document.getElementById("game-board").appendChild(this.canvas);
+    
     //Animation der Bewegung
     this.frames = 0;
     this.updateGameState = this.updateGameState.bind(this);
@@ -94,7 +95,22 @@ class CanvasGame {
 
   stopGame(){
     clearInterval(this.interval);
-    alert("Game Over!")
+    //clearCanvas, damit Cookiemonster und das Kollisionsobjekt verschwindet
+    this.clearCanvas();
+    /*Dieser Teil ändert die Transparenz unseres Hintergrundes indem ein weißes Rectangle mit Transparenzwert 0,7
+        drüber gelegt wird
+    */
+    this.ctx.fillStyle="whitesmoke";
+    this.ctx.globalAlpha=0.7;
+    this.ctx.fillRect(0,0, this.canvas.width, this.canvas.height);
+    /*Damit die Schrift nicht auch Transparent wird muss hier nochmal die Farbe 
+    und die Transparenz wieder auf 1 gesetzt werden
+    */
+    this.ctx.font="100px Permanent Marker";
+    this.ctx.fillStyle="orange";
+    this.ctx.globalAlpha=1;
+    this.ctx.fillText("Game Over", (this.canvas.width/2-260), 300)
+
   }
 }
 
