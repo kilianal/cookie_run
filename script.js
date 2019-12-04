@@ -1,6 +1,7 @@
 window.onload = function() {
   document.getElementById("start-game").onclick = function() {
     startGame();
+    
   };
 };
 
@@ -9,6 +10,14 @@ function startGame() {
   let cookieGame = new CanvasGame(900, 700);
   let interaction = new InteractionManual(300, 700);
   let scoreDisplay = new ScoreDisplay(300, 700);
+  let gameBoardCanvas= document.getElementById("game-board");
+  let interactionCanvas= document.getElementById("interactions");
+  let scoreDisplayCanvas= document.getElementById("score");
+  if(document.getElementById("game-board").children.length >0){
+    gameBoardCanvas.removeChild(gameBoardCanvas.childNodes[0]);
+    interactionCanvas.removeChild(interactionCanvas.childNodes[0]);
+    scoreDisplayCanvas.removeChild(scoreDisplayCanvas.childNodes[0]);
+  }
 }
 
 //Beschreibung für den Nutzer wie das Spiel gespielt werden muss
