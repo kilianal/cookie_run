@@ -109,13 +109,13 @@ class CanvasGame {
 
   //Methode damit eine Instanz unserer Cookies gemacht wird und in unser Array für die Cookies gespushed wird
   addCookies() {
-    let randomCookie = Math.floor(Math.random()* this.canvas.width);
+    let randomCookie = 10 + (Math.floor(Math.random()* this.canvas.width-10));
     this.gamePoints.push(this.cookie = new MovingCookies(randomCookie, this.ctx));
   }
 
   score(){
 
-    
+
   }
 
   checkGameOver() {
