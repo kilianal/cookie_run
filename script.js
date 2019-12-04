@@ -10,13 +10,16 @@ window.onload = function () {
   };
 };
 
+
+//Prüfen ob entfernt werden kann
 function createDiv(id){
   divContainer = document.createElement("p");
   document.getElementById(id).appendChild(divContainer);
   //divContainer.innerText=`${points}`;
-  
-}
+  }
+ // 
 
+ 
 function startGame() {
 
   let cookieGame = new CanvasGame(900, 700);
