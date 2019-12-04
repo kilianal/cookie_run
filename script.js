@@ -2,6 +2,7 @@ let points = 0;
 let divContainer;
 let divPlatzhalter;
 
+
 window.onload = function () {
   document.getElementById("start-game").onclick = function () {
     startGame();
@@ -19,7 +20,7 @@ function createDiv(id){
 function startGame() {
 
   let cookieGame = new CanvasGame(900, 700);
-  let interaction = new InteractionManual(300, 700);
+  let interaction = new InteractionManual("300px", "700px");
   let scoreDisplay = new ScoreDisplay("300px", "700px");
   let gameBoardCanvas = document.getElementById("game-board");
   let interactionCanvas = document.getElementById("interactions");
@@ -34,12 +35,18 @@ function startGame() {
 //Beschreibung für den Nutzer wie das Spiel gespielt werden muss
 class InteractionManual {
   constructor(width, height) {
-    this.canvas = document.createElement("canvas");
-    this.ctx = this.canvas.getContext("2d");
-    this.canvas.width = width;
-    this.canvas.height = height;
-    //this.canvas.style = "border: 2px solid whitesmoke";
-    document.getElementById("interactions").appendChild(this.canvas);
+   //this.canvas = document.createElement("canvas");
+   //this.ctx = this.canvas.getContext("2d");
+   //this.canvas.width = width;
+   //this.canvas.height = height;
+   ////this.canvas.style = "border: 2px solid whitesmoke";
+   //document.getElementById("interactions").appendChild(this.canvas);
+    let divPlatzhalter=document.createElement("div");
+    //divPlatzhalter.style = "border: 2px solid whitesmoke";
+    divPlatzhalter.style.width=width;
+    divPlatzhalter.style.height=height;    
+    document.getElementById("interactions").appendChild(divPlatzhalter);
+    
   }
 }
 
@@ -54,6 +61,7 @@ class ScoreDisplay {
     let pTag= document.createElement("p");
     document.querySelector("#score div").appendChild(pTag);
     pTag.setAttribute("id", "points");
+    pTag.innerText=`Score ${points}`;
       
   }
 }   
@@ -112,6 +120,8 @@ class CanvasGame {
 
     this.checkGameOver();
     this.checkWinner();
+    
+
   }
 
 
@@ -133,7 +143,7 @@ class CanvasGame {
 
   score() {
     points++;
-    document.getElementById("points").innerText=`${points}` ;
+    document.getElementById("points").innerText=`Score ${points}` ;
   }
 
 
@@ -167,19 +177,17 @@ class CanvasGame {
     /*Dieser Teil ändert die Transparenz unseres Hintergrundes indem ein weißes Rectangle mit Transparenzwert 0,7
         drüber gelegt wird
     */
-    this.ctx.fillStyle = "whitesmoke";
-    this.ctx.globalAlpha = 0.7;
-    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+   // this.ctx.fillStyle = "whitesmoke";
+   // this.ctx.globalAlpha = 0.7;
+   // this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     /*Damit die Schrift nicht auch Transparent wird muss hier nochmal die Farbe 
     und die Transparenz wieder auf 1 gesetzt werden
     */
-    this.ctx.drawImage(this.bild, 110, 215, 85, 85);
     this.ctx.font = "100px Permanent Marker";
-    this.ctx.fillStyle = "orange";
+    this.ctx.fillStyle = "whitesmoke";
     this.ctx.globalAlpha = 1;
     this.ctx.fillText("Game Over " , (this.canvas.width / 2 - 230), 300);
-    
-
+    this.canvas.style.backgroundImage = "url('pictures/bground.png')";
 
   }
 }
