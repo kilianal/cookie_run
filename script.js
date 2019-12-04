@@ -1,7 +1,7 @@
 let points = 0;
 let divContainer;
 let divPlatzhalter;
-
+let timer=100;
 
 window.onload = function () {
   document.getElementById("start-game").onclick = function () {
@@ -87,7 +87,7 @@ class CanvasGame {
     //Animation der Bewegung
     this.frames = 0;
     this.updateGameState = this.updateGameState.bind(this);
-    this.interval = setInterval(this.updateGameState, 30);
+    this.interval = setInterval(this.updateGameState, 25);
     this.gamesObjects = [];
     this.monster = new MovingMonster(this.ctx);
     this.gamesObjects.push(this.monster);
@@ -100,6 +100,15 @@ class CanvasGame {
     this.clearCanvas();
     //Bedinung damit zu einer bestimmten Zeit die Obstacles ins Canvas laufen
     this.frames += 1;
+    
+    //Timer der die Zeit runterzieht
+    if(this.frames%40==0){
+      timer=timer-1;
+      console.log(timer)
+    }
+    //Timer der die Zeit runterzieht
+
+
     let randomFrames=  (Math.floor(Math.random()* 100))+60;
     if (this.frames % randomFrames === 0) {
       this.addFruits();
