@@ -1,17 +1,26 @@
 let points = 0;
+let divContainer;
+let divPlatzhalter;
 
 window.onload = function () {
   document.getElementById("start-game").onclick = function () {
     startGame();
-
+    createDiv("score");
   };
 };
+
+function createDiv(id){
+  divContainer = document.createElement("p");
+  document.getElementById(id).appendChild(divContainer);
+  //divContainer.innerText=`${points}`;
+  
+}
 
 function startGame() {
 
   let cookieGame = new CanvasGame(900, 700);
   let interaction = new InteractionManual(300, 700);
-  let scoreDisplay = new ScoreDisplay(300, 700);
+  let scoreDisplay = new ScoreDisplay("300px", "700px");
   let gameBoardCanvas = document.getElementById("game-board");
   let interactionCanvas = document.getElementById("interactions");
   let scoreDisplayCanvas = document.getElementById("score");
@@ -29,24 +38,26 @@ class InteractionManual {
     this.ctx = this.canvas.getContext("2d");
     this.canvas.width = width;
     this.canvas.height = height;
-    this.canvas.style = "border: 2px solid whitesmoke";
+    //this.canvas.style = "border: 2px solid whitesmoke";
     document.getElementById("interactions").appendChild(this.canvas);
   }
 }
 
-//Anzeige der gesammelten Punkte
+//Klasse damit der Score angezeigt wird, der vom Spieler erreicht wurde
 class ScoreDisplay {
   constructor(width, height) {
-    this.canvas = document.createElement("canvas");
-    this.ctx = this.canvas.getContext("2d");
-    this.canvas.width = width;
-    this.canvas.height = height;
-    this.canvas.style = "border: 2px solid whitesmoke";
-    document.getElementById("score").appendChild(this.canvas);
-
-
+    let divPlatzhalter=document.createElement("div");
+    //divPlatzhalter.style = "border: 2px solid whitesmoke";
+    divPlatzhalter.style.width=width;
+    divPlatzhalter.style.height=height;    
+    document.getElementById("score").appendChild(divPlatzhalter);
+    let pTag= document.createElement("p");
+    document.querySelector("#score div").appendChild(pTag);
+    pTag.setAttribute("id", "points");
+      
   }
-}
+}   
+
 
 //Hier fangen die Klassen für das Cookiemonsterspiel an
 class CanvasGame {
@@ -81,7 +92,8 @@ class CanvasGame {
     this.clearCanvas();
     //Bedinung damit zu einer bestimmten Zeit die Obstacles ins Canvas laufen
     this.frames += 1;
-    if (this.frames % 100 === 0) {
+    let randomFrames=  (Math.floor(Math.random()* 100))+60;
+    if (this.frames % randomFrames === 0) {
       this.addFruits();
 
     }
@@ -121,7 +133,7 @@ class CanvasGame {
 
   score() {
     points++;
-    console.log(points)
+    document.getElementById("points").innerText=`${points}` ;
   }
 
 
@@ -165,7 +177,8 @@ class CanvasGame {
     this.ctx.font = "100px Permanent Marker";
     this.ctx.fillStyle = "orange";
     this.ctx.globalAlpha = 1;
-    this.ctx.fillText("Game Over", (this.canvas.width / 2 - 230), 300);
+    this.ctx.fillText("Game Over " , (this.canvas.width / 2 - 230), 300);
+    
 
 
   }
@@ -272,21 +285,6 @@ class MovingMonster extends MovingObjects {
   }
 }
 
-class MovingFruits extends MovingObjects {
-  constructor(ctx) {
-    super(ctx.canvas.width, 570, ctx, 50, 50);
-
-    this.color = "orange";
-    this.xSpeed = -10;
-
-  }
-
-  update() {
-    this.xPosition += this.xSpeed;
-    this.ctx.fillStyle = this.color;
-    this.ctx.fillRect(this.xPosition, this.yPosition, this.width, this.height);
-  }
-}
 
 class MovingCookies extends MovingObjects {
   constructor(xPosition, ctx) {
@@ -315,4 +313,29 @@ class MovingCookies extends MovingObjects {
 
 }
 
+
+class MovingFruits extends MovingObjects {
+  constructor(ctx) {
+    super(900, 600, ctx, 50, 50);
+    this.xSpeed = -10;
+    this.img = new Image();
+    this.img.src = "pictures/apfel.png";
+    
+  }
+
+  update() {
+    this.xPosition += this.xSpeed;
+    this.draw();
+  }
+  draw() {
+    this.ctx.drawImage(
+      this.img,
+      this.xPosition,
+      this.yPosition,
+      this.width,
+      this.height
+    );
+  }
+
+}
 
