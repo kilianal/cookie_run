@@ -1,78 +1,40 @@
-let points = 0;
+let points;
 let divContainer;
 let divPlatzhalter;
-let timer=100;
+let timer;
 
 window.onload = function () {
   document.getElementById("start-game").onclick = function () {
     startGame();
-    createDiv("score");
+    points = 0;
+    timer = 100;
+    
   };
 };
-
-
-//Prüfen ob entfernt werden kann
-function createDiv(id){
-  divContainer = document.createElement("p");
-  document.getElementById(id).appendChild(divContainer);
-  //divContainer.innerText=`${points}`;
-  }
- // 
-
  
 function startGame() {
-
-  let cookieGame = new CanvasGame(900, 700);
-  let interaction = new InteractionManual("300px", "700px");
-  let scoreDisplay = new ScoreDisplay("300px", "700px");
+  let scoreDisplay = new ScoreDisplay(300, 700);
+  let interaction = new InteractionManual(300,700);
+  let cookieGame = new CanvasGame(900, 700, scoreDisplay);
   let gameBoardCanvas = document.getElementById("game-board");
   let interactionCanvas = document.getElementById("interactions");
   let scoreDisplayCanvas = document.getElementById("score");
+  //Blockiert den Start Button um unfreiwilligen Neustart zu verhindern, bis stopGame() ausgeführt wird. 
+  document.getElementById("start-game").setAttribute("disabled","disabled");
   if (document.getElementById("game-board").children.length > 0) {
     gameBoardCanvas.removeChild(gameBoardCanvas.childNodes[0]);
     interactionCanvas.removeChild(interactionCanvas.childNodes[0]);
     scoreDisplayCanvas.removeChild(scoreDisplayCanvas.childNodes[0]);
   }
+
 }
 
-//Beschreibung für den Nutzer wie das Spiel gespielt werden muss
-class InteractionManual {
-  constructor(width, height) {
-   //this.canvas = document.createElement("canvas");
-   //this.ctx = this.canvas.getContext("2d");
-   //this.canvas.width = width;
-   //this.canvas.height = height;
-   ////this.canvas.style = "border: 2px solid whitesmoke";
-   //document.getElementById("interactions").appendChild(this.canvas);
-    let divPlatzhalter=document.createElement("div");
-    //divPlatzhalter.style = "border: 2px solid whitesmoke";
-    divPlatzhalter.style.width=width;
-    divPlatzhalter.style.height=height;    
-    document.getElementById("interactions").appendChild(divPlatzhalter);
-    
-  }
-}
-
-//Klasse damit der Score angezeigt wird, der vom Spieler erreicht wurde
-class ScoreDisplay {
-  constructor(width, height) {
-    let divPlatzhalter=document.createElement("div");
-    //divPlatzhalter.style = "border: 2px solid whitesmoke";
-    divPlatzhalter.style.width=width;
-    divPlatzhalter.style.height=height;    
-    document.getElementById("score").appendChild(divPlatzhalter);
-    let pTag= document.createElement("p");
-    document.querySelector("#score div").appendChild(pTag);
-    pTag.setAttribute("id", "points");
-    pTag.innerText=`Score ${points}`;
-      
-  }
-}   
 
 
 //Hier fangen die Klassen für das Cookiemonsterspiel an
 class CanvasGame {
-  constructor(width, height) {
+  constructor(width, height, scoreCanvas) {
+    this.scoreCanvas = scoreCanvas;
     this.canvas = document.createElement("canvas");
     this.ctx = this.canvas.getContext("2d");
     this.canvas.width = width;
@@ -99,19 +61,11 @@ class CanvasGame {
   }
 
   updateGameState() {
-
+    this.scoreCanvas.updateScore();
     this.clearCanvas();
     //Bedinung damit zu einer bestimmten Zeit die Obstacles ins Canvas laufen
     this.frames += 1;
     
-    //Timer der die Zeit runterzieht
-    if(this.frames%40==0){
-      timer=timer-1;
-      console.log(timer)
-    }
-    //Timer der die Zeit runterzieht
-
-
     let randomFrames=  (Math.floor(Math.random()* 100))+60;
     if (this.frames % randomFrames === 0) {
       this.addFruits();
@@ -148,14 +102,14 @@ class CanvasGame {
 
   //Methode damit eine Instanz unserer Cookies gemacht wird und in unser Array für die Cookies gespushed wird
   addCookies() {
-    let randomCookie = 10 + (Math.floor(Math.random() * this.canvas.width - 10));
+    let randomCookie = 15 + (Math.floor(Math.random() * (this.canvas.width - 80)));
     this.gamePoints.push(this.cookie = new MovingCookies(randomCookie, this.ctx));
   }
 
 
   score() {
     points++;
-    document.getElementById("points").innerText=`Score ${points}` ;
+    //document.getElementById("points").innerText=`Score ${points}` ;
   }
 
 
@@ -179,11 +133,14 @@ class CanvasGame {
     });
 
     if (crashed) this.stopGame();
+    
 
   }
 
   stopGame() {
     clearInterval(this.interval);
+    //Start Game Button wieder activieren
+    document.getElementById("start-game").removeAttribute("disabled");
     //clearCanvas, damit Cookiemonster und das Kollisionsobjekt verschwindet
     this.clearCanvas();
     /*Dieser Teil ändert die Transparenz unseres Hintergrundes indem ein weißes Rectangle mit Transparenzwert 0,7
@@ -203,6 +160,77 @@ class CanvasGame {
 
   }
 }
+
+//Beschreibung für den Nutzer wie das Spiel gespielt werden muss
+class InteractionManual {
+  constructor(width, height) {
+      this.canvas = document.createElement("canvas");
+      this.ctx = this.canvas.getContext("2d");
+      this.canvas.width = width;
+      this.canvas.height = height;
+      this.canvas.style = "border: 2px solid whitesmoke";
+      document.getElementById("interactions").appendChild(this.canvas);
+  //  let divPlatzhalter=document.createElement("div");
+  //  //divPlatzhalter.style = "border: 2px solid whitesmoke";
+  //  divPlatzhalter.style.width=width;
+  //  divPlatzhalter.style.height=height;    
+  //  document.getElementById("interactions").appendChild(divPlatzhalter);
+    
+  }
+}
+
+//Klasse damit der Score angezeigt wird, der vom Spieler erreicht wurde
+class ScoreDisplay {
+  constructor(width, height) {
+      this.canvas = document.createElement("canvas");
+      this.ctx = this.canvas.getContext("2d");
+      this.canvas.width = width;
+      this.canvas.height = height;
+      //this.canvas.style = "border: 2px solid whitesmoke";
+      document.getElementById("score").appendChild(this.canvas);
+
+      this.snowflake2 = new Image();
+      this.snowflake2.src = "pictures/snowflake2-white.png";
+          
+      this.frames = 0;
+   
+  }
+
+  updateScore(){
+    this.clearCanvas();
+    this.frames += 1;
+    this.ctx.globalAlpha = 1;
+    this.ctx.textAlign = "center";
+    this.ctx.font = "36px Permanent Marker";
+    this.ctx.fillStyle = "whitesmoke";
+    
+    this.ctx.fillText('Score: ' + points ,this.canvas.width/2,100);
+    this.ctx.globalAlpha = 0.4;
+    this.ctx.drawImage(this.snowflake2,-10,180,50,50);
+    this.ctx.drawImage(this.snowflake2,240,360,80,80);
+
+    this.counter();
+  }
+
+  clearCanvas() {
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+  }
+
+  counter(){
+     //Timer der die Zeit runterzieht
+     if(this.frames%40==0){
+      timer= timer-1;
+     }
+    this.ctx.globalAlpha = 1;
+    this.ctx.textAlign = "center";
+    this.ctx.font = "36px Permanent Marker";
+    this.ctx.fillStyle = "whitesmoke";
+    
+    this.ctx.fillText('Time left: ' + timer ,this.canvas.width/2,50);
+    //Timer der die Zeit runterzieht
+  }
+}   
+
 
 //Klasse für die bewegenden Objekte
 class MovingObjects {
@@ -229,11 +257,6 @@ class MovingObjects {
   }
 
   isCollidedWith(object) {
-    // if (this.right()> object.left() &&
-    //     this.left() < object.right() &&
-    //     this.top() < object.bottom() &&
-    //     this.bottom() > object.top())
-    //     return true;
 
     if (this === object) return false;
     return !(
@@ -261,7 +284,7 @@ class MovingMonster extends MovingObjects {
           this.xSpeed += 9;
           break;
         case 32:
-          this.ySpeed -= 30;
+          this.ySpeed -= 25;
           break;
         default:
       }
@@ -269,7 +292,7 @@ class MovingMonster extends MovingObjects {
     document.onkeyup = e => {
       this.xSpeed = 0;
       if (this.yPosition < 570) {
-        this.ySpeed = 30;
+        this.ySpeed = 25;
       }
     };
   }
@@ -278,7 +301,7 @@ class MovingMonster extends MovingObjects {
     this.xPosition += this.xSpeed;
     this.yPosition += this.ySpeed;
     if (this.yPosition <= 240) {
-      this.ySpeed = 30;
+      this.ySpeed = 25;
       this.yPosition += this.ySpeed;
     }
     if (this.yPosition >= 570) {
@@ -337,7 +360,7 @@ class MovingCookies extends MovingObjects {
 class MovingFruits extends MovingObjects {
   constructor(ctx) {
     super(900, 600, ctx, 50, 50);
-    this.xSpeed = -10;
+    this.xSpeed = -8;
     this.img = new Image();
     this.img.src = "pictures/apfel.png";
     

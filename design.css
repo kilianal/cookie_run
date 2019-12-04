@@ -85,19 +85,3 @@ h1 {
   margin-left: 30px;
   font-size: 50px;
 }
-
-#score{
-    background-image: url('pictures/snowflake-white.png');
-    opacity: 0.4;
-}
-
-
-#interactions{
-    background-image: url('pictures/snowflake2-white.png');
-    opacity: 0.4;
-    background-size: 120%;
-    background-repeat: no-repeat;
-    background-position-x: 50px;
-    background-position-y: 350px;
-}
-
