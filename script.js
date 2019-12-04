@@ -47,8 +47,7 @@ class CanvasGame {
     this.canvas.style.marginRight = "10px";
     this.canvas.style.marginLeft = "10px";
     document.getElementById("game-board").appendChild(this.canvas);
-    this.bild = new Image();
-    this.bild.src = "pictures/cookie2.png";
+
     //Animation der Bewegung
     this.frames = 0;
     this.updateGameState = this.updateGameState.bind(this);
@@ -66,7 +65,8 @@ class CanvasGame {
     //Bedinung damit zu einer bestimmten Zeit die Obstacles ins Canvas laufen
     this.frames += 1;
     
-    let randomFrames=  (Math.floor(Math.random()* 100))+60;
+    let randomFrames=  (Math.floor(Math.random()* 150))+125;
+    console.log(randomFrames);
     if (this.frames % randomFrames === 0) {
       this.addFruits();
 
@@ -284,7 +284,7 @@ class MovingMonster extends MovingObjects {
           this.xSpeed += 9;
           break;
         case 32:
-          this.ySpeed -= 25;
+          this.ySpeed -= 22;
           break;
         default:
       }
@@ -292,7 +292,7 @@ class MovingMonster extends MovingObjects {
     document.onkeyup = e => {
       this.xSpeed = 0;
       if (this.yPosition < 570) {
-        this.ySpeed = 25;
+        this.ySpeed = 16;
       }
     };
   }
@@ -300,8 +300,8 @@ class MovingMonster extends MovingObjects {
   update() {
     this.xPosition += this.xSpeed;
     this.yPosition += this.ySpeed;
-    if (this.yPosition <= 240) {
-      this.ySpeed = 25;
+    if (this.yPosition <= 200) {
+      this.ySpeed = 22;
       this.yPosition += this.ySpeed;
     }
     if (this.yPosition >= 570) {
@@ -360,7 +360,7 @@ class MovingCookies extends MovingObjects {
 class MovingFruits extends MovingObjects {
   constructor(ctx) {
     super(900, 600, ctx, 50, 50);
-    this.xSpeed = -8;
+    this.xSpeed = -6;
     this.img = new Image();
     this.img.src = "pictures/apfel.png";
     
