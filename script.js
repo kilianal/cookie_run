@@ -1,7 +1,7 @@
-window.onload = function() {
-  document.getElementById("start-game").onclick = function() {
+window.onload = function () {
+  document.getElementById("start-game").onclick = function () {
     startGame();
-    
+
   };
 };
 
@@ -10,10 +10,10 @@ function startGame() {
   let cookieGame = new CanvasGame(900, 700);
   let interaction = new InteractionManual(300, 700);
   let scoreDisplay = new ScoreDisplay(300, 700);
-  let gameBoardCanvas= document.getElementById("game-board");
-  let interactionCanvas= document.getElementById("interactions");
-  let scoreDisplayCanvas= document.getElementById("score");
-  if(document.getElementById("game-board").children.length >0){
+  let gameBoardCanvas = document.getElementById("game-board");
+  let interactionCanvas = document.getElementById("interactions");
+  let scoreDisplayCanvas = document.getElementById("score");
+  if (document.getElementById("game-board").children.length > 0) {
     gameBoardCanvas.removeChild(gameBoardCanvas.childNodes[0]);
     interactionCanvas.removeChild(interactionCanvas.childNodes[0]);
     scoreDisplayCanvas.removeChild(scoreDisplayCanvas.childNodes[0]);
@@ -59,8 +59,8 @@ class CanvasGame {
     this.canvas.style.marginRight = "10px";
     this.canvas.style.marginLeft = "10px";
     document.getElementById("game-board").appendChild(this.canvas);
-    this.bild =new Image();
-    this.bild.src="pictures/cookie2.png";
+    this.bild = new Image();
+    this.bild.src = "pictures/cookie2.png";
     //Animation der Bewegung
     this.frames = 0;
     this.updateGameState = this.updateGameState.bind(this);
@@ -68,60 +68,84 @@ class CanvasGame {
     this.gamesObjects = [];
     this.monster = new MovingMonster(this.ctx);
     this.gamesObjects.push(this.monster);
-     
+    this.gamePoints = [];
+    this.gamePoints.push(this.monster);
   }
 
   updateGameState() {
-    
+
     this.clearCanvas();
-    this.frames += 1;    
-    if (this.frames % 100 === 0){
-        this.addFruits();
-        console.log(this.gamesObjects);
+//Bedinung damit zu einer bestimmten Zeit die Obstacles ins Canvas laufen
+    this.frames += 1;
+    if (this.frames % 100 === 0) {
+      this.addFruits();
+      console.log(this.gamesObjects);
     }
-    this.gamesObjects.forEach(function(gameObject) {
-        gameObject.update();
+    this.gamesObjects.forEach(function (gameObject) {
+      gameObject.update();
+    });
+
+//Bedingung damit die Cookies zu einer bestimmten Zeit runterfallen
+    if (this.frames % 50 === 0) {
+      this.addCookies();
+      console.log(this.gamePoints);
+    }
+    this.gamePoints.forEach(function (gameObject) {
+      gameObject.update();
     });
 
     this.checkGameOver();
   }
 
+
   clearCanvas() {
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); 
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
-  addFruits(){
+  //Methode damit eine Instanz unserer Fruits gemacht wird und in unser Array für die Cookies gespushed wird
+  addFruits() {
     this.gamesObjects.push(this.fruit = new MovingFruits(this.ctx));
   }
 
-  checkGameOver(){
-      let crashed = this.gamesObjects.some(object => {
-          return this.monster.isCollidedWith(object);
-      });
-     
-      if (crashed) this.stopGame();
+  //Methode damit eine Instanz unserer Cookies gemacht wird und in unser Array für die Cookies gespushed wird
+  addCookies() {
+    let randomCookie = Math.floor(Math.random()* this.canvas.width);
+    this.gamePoints.push(this.cookie = new MovingCookies(randomCookie, this.ctx));
+  }
+
+  score(){
+
+    
+  }
+
+  checkGameOver() {
+    let crashed = this.gamesObjects.some(object => {
+      return this.monster.isCollidedWith(object);
+    });
+
+    if (crashed) this.stopGame();
 
   }
 
-  stopGame(){
+  stopGame() {
     clearInterval(this.interval);
     //clearCanvas, damit Cookiemonster und das Kollisionsobjekt verschwindet
     this.clearCanvas();
     /*Dieser Teil ändert die Transparenz unseres Hintergrundes indem ein weißes Rectangle mit Transparenzwert 0,7
         drüber gelegt wird
     */
-    this.ctx.fillStyle="whitesmoke";
-    this.ctx.globalAlpha=0.7;
-    this.ctx.fillRect(0,0, this.canvas.width, this.canvas.height);
+    this.ctx.fillStyle = "whitesmoke";
+    this.ctx.globalAlpha = 0.7;
+    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     /*Damit die Schrift nicht auch Transparent wird muss hier nochmal die Farbe 
     und die Transparenz wieder auf 1 gesetzt werden
     */
-    this.ctx.drawImage(this.bild, 110,215, 85,85);
-    this.ctx.font="100px Permanent Marker";
-    this.ctx.fillStyle="orange";
-    this.ctx.globalAlpha=1;
-    this.ctx.fillText("Game Over", (this.canvas.width/2-230), 300);
-    
+    this.ctx.drawImage(this.bild, 110, 215, 85, 85);
+    this.ctx.font = "100px Permanent Marker";
+    this.ctx.fillStyle = "orange";
+    this.ctx.globalAlpha = 1;
+    this.ctx.fillText("Game Over", (this.canvas.width / 2 - 230), 300);
+
 
   }
 }
@@ -137,34 +161,34 @@ class MovingObjects {
     this.ySpeed = 0;
     this.xSpeed = 0;
   }
-  left(){
-      return this.xPosition;
+  left() {
+    return this.xPosition;
   }
-  right(){
-      return this.xPosition+this.width;
+  right() {
+    return this.xPosition + this.width;
   }
-  top(){
-      return this.yPosition;
+  top() {
+    return this.yPosition;
   }
-  bottom(){
-      return this.yPosition+this.height;
+  bottom() {
+    return this.yPosition + this.height;
   }
 
-  isCollidedWith(object){
+  isCollidedWith(object) {
     // if (this.right()> object.left() &&
     //     this.left() < object.right() &&
     //     this.top() < object.bottom() &&
     //     this.bottom() > object.top())
     //     return true;
 
-      if (this === object) return false;
-      return!(
-          this.bottom()-10 < object.top() ||
-          this.top() > object.bottom() ||
-          this.left() > object.right() ||
-          this.right() < object.left()
-      );
-   
+    if (this === object) return false;
+    return !(
+      this.bottom() - 10 < object.top() ||
+      this.top() > object.bottom() ||
+      this.left() > object.right() ||
+      this.right() < object.left()
+    );
+
   }
 }
 
@@ -196,7 +220,7 @@ class MovingMonster extends MovingObjects {
     };
   }
   //MonsterUpdate Methode lässt Monster springen, nach rechts und links bewegen ohne das Spielfeld zu verlassen
-  update() { 
+  update() {
     this.xPosition += this.xSpeed;
     this.yPosition += this.ySpeed;
     if (this.yPosition <= 240) {
@@ -228,20 +252,46 @@ class MovingMonster extends MovingObjects {
 }
 
 class MovingFruits extends MovingObjects {
-    constructor(ctx){
-        super(ctx.canvas.width, 570, ctx, 50, 50 );
+  constructor(ctx) {
+    super(ctx.canvas.width, 570, ctx, 50, 50);
 
-        this.color = "orange";
-        this.xSpeed = -10;
+    this.color = "orange";
+    this.xSpeed = -10;
 
-    }
-    //fruitsUpdate
-    update(){
-        this.xPosition += this.xSpeed;
-        this.ctx.fillStyle = this.color;
-        this.ctx.fillRect(this.xPosition, this.yPosition, this.width, this.height);
-    }
+  }
+
+  update() {
+    this.xPosition += this.xSpeed;
+    this.ctx.fillStyle = this.color;
+    this.ctx.fillRect(this.xPosition, this.yPosition, this.width, this.height);
+  }
 }
 
+class MovingCookies extends MovingObjects {
+  constructor(xPosition, ctx) {
+    super(xPosition, 0, ctx, 50, 50);
+    this.ySpeed = 10;
+    this.img = new Image();
+    this.img.src = "pictures/cookie1.png";
+    this.xPosition=xPosition;
+    
+
+  }
+
+  update() {
+    this.yPosition += this.ySpeed;
+    this.draw();
+  }
+  draw() {
+    this.ctx.drawImage(
+      this.img,
+      this.xPosition,
+      this.yPosition,
+      this.width,
+      this.height
+    );
+  }
+
+}
 
 
