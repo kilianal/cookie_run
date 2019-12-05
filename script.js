@@ -10,6 +10,10 @@ let bittenCookie = new Image();
 bittenCookie.src = "pictures/cookie2.png";
 let cookie = new Image();
 cookie.src = "pictures/cookie1.png";
+let cookie3 = new Image();
+cookie3.src = "pictures/cookie3.png";
+let monsterkopf = new Image();
+monsterkopf.src = "pictures/cookiemonster-kopf.png";
 
 
 window.onload = function () {
@@ -21,7 +25,7 @@ window.onload = function () {
 };
 
 function startGame() {
-  let scoreDisplay = new ScoreDisplay(300, 700);
+  let scoreDisplay = new ScoreDisplay(300, 724);
   let interaction = new InteractionManual(300, 700);
   let cookieGame = new CanvasGame(900, 700, scoreDisplay);
   let gameBoardCanvas = document.getElementById("game-board");
@@ -155,23 +159,31 @@ class CanvasGame {
       this.ctx.globalAlpha = 0.7;
       this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
       this.ctx.textAlign = "center";
-      this.ctx.font = "100px Permanent Marker";
+      
       this.ctx.fillStyle = "#ed7d32";
 
       //Damit die Schrift nicht auch Transparent wird muss hier nochmal die Farbe und die Transparenz wieder auf 1 gesetzt werden
       this.ctx.globalAlpha = 1;
-      this.ctx.fillText("WIN!", (this.canvas.width / 2), 220);
       this.ctx.font = "42px Permanent Marker";
       this.ctx.fillText("A full Monster", (this.canvas.width / 2), 300);
       this.ctx.fillText("is a happy Monster!", (this.canvas.width / 2), 350);
       this.ctx.fillText("Cookies eaten: " + points, (this.canvas.width / 2), 500);
+      this.ctx.font = "100px Permanent Marker";
+      this.ctx.shadowColor = "#b1bcc9";
+      this.ctx.shadowOffsetX = 7;
+      this.ctx.shadowOffsetY = 7;
+      this.ctx.shadowBlur = 3;
+      this.ctx.fillText("WIN!", (this.canvas.width / 2), 220);
     }
 
     if (status === "lose") {
       this.ctx.font = "100px Permanent Marker";
       this.ctx.fillStyle = "#ed7d32";
       this.ctx.globalAlpha = 1;
-      this.ctx.fillText("Game Over ", (this.canvas.width / 2 - 230), 300);
+      this.ctx.shadowColor = "whitesmoke"; 
+      this.ctx.shadowOffsetX = 4;
+      this.ctx.shadowOffsetY = 4;
+      this.ctx.fillText("Game Over ", (this.canvas.width / 2 - 240), 300);
       this.canvas.style.backgroundImage = "url('pictures/gameover.jpg')";
       this.canvas.style.backgroundPosition = "center center";
       this.canvas.style.backgroundSize = "900px";
@@ -198,6 +210,7 @@ class ScoreDisplay {
     this.ctx = this.canvas.getContext("2d");
     this.canvas.width = width;
     this.canvas.height = height;
+    this.canvas.style.marginTop = "20px";
     document.getElementById("score").appendChild(this.canvas);
 
     this.frames = 0;
@@ -206,15 +219,26 @@ class ScoreDisplay {
   updateScore() {
     this.clearCanvas();
     this.frames += 1;
-    this.ctx.globalAlpha = 1;
-    this.ctx.textAlign = "center";
-    this.ctx.font = "36px Permanent Marker";
-    this.ctx.fillStyle = "whitesmoke";
-    this.ctx.fillText('Score: ' + points, this.canvas.width / 2, 100);
+    this.ctx.globalAlpha =1;
+    this.ctx.textAlign = "left";
+    this.ctx.font = "40px Permanent Marker";
+    this.ctx.fillStyle = "white";
+    this.ctx.fillText('Score:', 30, 175);
+    this.ctx.fillText(points, 250, 175);   
+    this.ctx.drawImage(cookie3,190,142,35,35);
+    this.ctx.drawImage(monsterkopf,220,640,70,70)
 
     this.ctx.globalAlpha = 0.4;
+    this.ctx.drawImage(snowflake1, 250, -10, 90, 90);
+    this.ctx.drawImage(snowflake2, 230, 15, 20, 20);
     this.ctx.drawImage(snowflake2, -10, 180, 50, 50);
-    this.ctx.drawImage(snowflake2, 240, 360, 80, 80);
+    this.ctx.drawImage(snowflake1, 225, 335, 30, 30);
+    this.ctx.drawImage(snowflake2, 210, 360, 15, 15);
+    this.ctx.drawImage(snowflake2, 225, 360, 90, 90);
+    this.ctx.drawImage(snowflake2, 75, 570, 40, 40);
+    this.ctx.drawImage(snowflake1,-10, 600, 180, 180);
+    this.ctx.drawImage(snowflake2, 150, 640, 20, 20);
+    
 
     this.counter();
   }
@@ -230,11 +254,24 @@ class ScoreDisplay {
     }
 
     this.ctx.globalAlpha = 1;
-    this.ctx.textAlign = "center";
-    this.ctx.font = "36px Permanent Marker";
-    this.ctx.fillStyle = "whitesmoke";
+    this.ctx.textAlign = "left";
+    this.ctx.font = "40px Permanent Marker";
+    this.ctx.fillStyle = "white";
 
-    this.ctx.fillText('Time left: ' + timer, this.canvas.width / 2, 50);
+    this.ctx.fillText('Time left:', 30, 120);
+    if (timer <=10){
+      this.ctx.fillStyle = "#ed7d32";
+      this.ctx.shadowColor = "whitesmoke"; //#c3d0de
+      this.ctx.shadowOffsetX = 3;
+      this.ctx.shadowOffsetY = 3;
+      };
+    
+    this.ctx.fillText(timer,250,120);
+    
+    this.ctx.shadowOffsetX = 0;
+    this.ctx.shadowOffsetY = 0;
+    this.ctx.shadowBlur = 0;
+   
     //Timer der die Zeit runterzieht
   }
 }
@@ -350,6 +387,7 @@ class MovingCookies extends MovingObjects {
   }
 
   draw() {
+    
     this.ctx.drawImage(
       cookie,
       this.xPosition,
