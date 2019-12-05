@@ -1,7 +1,16 @@
 let points;
-let divContainer;
-let divPlatzhalter;
 let timer;
+
+//Seiten Canvas Bilder Ressourcen
+let snowflake2 = new Image();
+snowflake2.src = "pictures/snowflake2-white.png";
+let snowflake1 = new Image();
+snowflake1.src = "pictures/snowflake-white.png";
+let bittenCookie = new Image();
+bittenCookie.src = "pictures/cookie2.png";
+let cookie = new Image();
+cookie.src = "pictures/cookie1.png";
+
 
 window.onload = function () {
   document.getElementById("start-game").onclick = function () {
@@ -20,6 +29,7 @@ function startGame() {
   let scoreDisplayCanvas = document.getElementById("score");
   //Blockiert den Start Button um unfreiwilligen Neustart zu verhindern, bis stopGame() ausgeführt wird. 
   document.getElementById("start-game").setAttribute("disabled", "disabled");
+  //Wenn bereits ein Game gestartet wurde, verhindert dies, dass einfach nur ein weiteres unten hinzugefügt wird.
   if (document.getElementById("game-board").children.length > 0) {
     gameBoardCanvas.removeChild(gameBoardCanvas.childNodes[0]);
     interactionCanvas.removeChild(interactionCanvas.childNodes[0]);
@@ -55,6 +65,8 @@ class CanvasGame {
     this.gamesObjects.push(this.monster);
     this.gamePoints = [];
     this.gamePoints.push(this.monster);
+    
+    
   }
 
   updateGameState() {
@@ -64,9 +76,10 @@ class CanvasGame {
     this.frames += 1;
 
     let randomFrames = (Math.floor(Math.random() * 150)) + 125;
-    console.log(randomFrames);
+    
     if (this.frames % randomFrames === 0) {
       this.addFruits();
+    
     }
 
     this.gamesObjects.forEach(function (gameObject) {
@@ -93,6 +106,7 @@ class CanvasGame {
   //Methode damit eine Instanz unserer Fruits gemacht wird und in unser Array für die Cookies gespushed wird
   addFruits() {
     this.gamesObjects.push(this.fruit = new MovingFruits(this.ctx));
+    
   }
 
   //Methode damit eine Instanz unserer Cookies gemacht wird und in unser Array für die Cookies gespushed wird
@@ -115,7 +129,7 @@ class CanvasGame {
     });
 
     if (catched) this.score();
-    if (timer === 0) this.stopGame("win");
+    if (timer === 0 && points > 0) this.stopGame("win");
   }
 
   checkGameOver() {
@@ -123,7 +137,7 @@ class CanvasGame {
       return this.monster.isCollidedWith(object);
     });
 
-    if (crashed) this.stopGame("lose");
+    if (crashed || (timer === 0 && points === 0)) this.stopGame("lose");
   }
 
   stopGame(status) {
@@ -150,6 +164,7 @@ class CanvasGame {
       this.ctx.font = "42px Permanent Marker";
       this.ctx.fillText("A full Monster", (this.canvas.width / 2), 300);
       this.ctx.fillText("is a happy Monster!", (this.canvas.width / 2), 350);
+      this.ctx.fillText("Cookies eaten: " + points, (this.canvas.width / 2), 500);
     }
 
     if (status === "lose") {
@@ -185,9 +200,6 @@ class ScoreDisplay {
     this.canvas.height = height;
     document.getElementById("score").appendChild(this.canvas);
 
-    this.snowflake2 = new Image();
-    this.snowflake2.src = "pictures/snowflake2-white.png";
-
     this.frames = 0;
   }
 
@@ -201,8 +213,8 @@ class ScoreDisplay {
     this.ctx.fillText('Score: ' + points, this.canvas.width / 2, 100);
 
     this.ctx.globalAlpha = 0.4;
-    this.ctx.drawImage(this.snowflake2, -10, 180, 50, 50);
-    this.ctx.drawImage(this.snowflake2, 240, 360, 80, 80);
+    this.ctx.drawImage(snowflake2, -10, 180, 50, 50);
+    this.ctx.drawImage(snowflake2, 240, 360, 80, 80);
 
     this.counter();
   }
@@ -329,8 +341,6 @@ class MovingCookies extends MovingObjects {
   constructor(xPosition, ctx) {
     super(xPosition, 0, ctx, 50, 50);
     this.ySpeed = 10;
-    this.img = new Image();
-    this.img.src = "pictures/cookie1.png";
     this.xPosition = xPosition;
   }
 
@@ -341,7 +351,7 @@ class MovingCookies extends MovingObjects {
 
   draw() {
     this.ctx.drawImage(
-      this.img,
+      cookie,
       this.xPosition,
       this.yPosition,
       this.width,
