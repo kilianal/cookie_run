@@ -368,9 +368,9 @@ class MovingObjects {
     if (this === object) return false;
     return !(
       this.bottom() - 10 < object.top() ||
-      this.top() > object.bottom() ||
-      this.left() -10 > object.right() ||
-      this.right() -10 < object.left()
+      this.top() +20 > object.bottom() ||
+      this.left() +20 > object.right() ||
+      this.right() -20 < object.left()
     );
   }
 }
@@ -385,15 +385,21 @@ class MovingMonster extends MovingObjects {
       
       switch (e.keyCode) {
         case 37:
-          this.xSpeed -= 8;
+          this.xSpeed = -8;
           e.preventDefault();
           break;
         case 39:
-          this.xSpeed += 8;
+          this.xSpeed = +8;
           e.preventDefault();
           break;
         case 32:
-          this.ySpeed -= 22;
+          this.ySpeed = -22;
+          e.preventDefault();
+          break;
+        case 38:
+          e.preventDefault();
+          break;
+        case 40:
           e.preventDefault();
           break;
          default:
@@ -402,7 +408,7 @@ class MovingMonster extends MovingObjects {
     document.onkeyup = e => {
       this.xSpeed = 0;
       if (this.yPosition < 570) {
-        this.ySpeed = 14;
+        this.ySpeed = 12;
       }
     };
   }
