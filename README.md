@@ -30,5 +30,5 @@ Start Button
 5. Fußnoten
 
 6. Bildquellen:
-Keyboardkeys: <a href="https://de.freepik.com/fotos-vektoren-kostenlos/infografik">Infografik Vektor erstellt von freepik - de.freepik.com</a>
+
 
