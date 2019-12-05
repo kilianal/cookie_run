@@ -1,6 +1,7 @@
 let points;
 let timer;
 let randomFrames;
+let highscoreArray=[0];
 
 
 
@@ -64,13 +65,13 @@ class InteractionManual {
     this.ctx.fillStyle="#f2690f";
     this.ctx.shadowOffsetX =2
     this.ctx.shadowOffsetY =2;
-    this.ctx.shadowColor = "white";
+    this.ctx.shadowColor = "whitesmoke";
     this.ctx.fillText("Instructions", 15, 100);
     this.ctx.font="25px Permanent Marker";
     this.ctx.fillStyle="black";
     this.ctx.shadowOffsetX =2
     this.ctx.shadowOffsetY =2;
-    this.ctx.shadowColor = "white";
+    this.ctx.shadowColor = "whitesmoke";
     this.ctx.shadowOffsetX =0;
     this.ctx.shadowOffsetY =0;
     this.ctx.fillText("Catch as many cookies",15,150);
@@ -81,13 +82,13 @@ class InteractionManual {
     this.ctx.fillStyle="#f2690f";
     this.ctx.shadowOffsetX =2
     this.ctx.shadowOffsetY =2;
-    this.ctx.shadowColor = "white";
+    this.ctx.shadowColor = "whitesmoke";
     this.ctx.fillText("Game Control", 30,320);
     this.ctx.font="25px Permanent Marker";
     this.ctx.fillStyle="black";
     this.ctx.shadowOffsetX =2
     this.ctx.shadowOffsetY =2;
-    this.ctx.shadowColor = "white";
+    this.ctx.shadowColor = "whitesmoke";
     this.ctx.shadowOffsetX =0;
     this.ctx.shadowOffsetY =0;
     this.ctx.fillText("Use your keyboard to ",15,360)
@@ -100,6 +101,11 @@ class InteractionManual {
     this.ctx.shadowOffsetY =0;
    
     //Cookies die als Bilder angezeigt werden
+    this.ctx.globalAlpha=0.4;
+    this.ctx.drawImage(snowflake1, 130, 650, 90, 90);
+    this.ctx.drawImage(snowflake2, 15, 25, 30, 30);
+    this.ctx.drawImage(snowflake2, 220, 530, 40, 40);
+    this.ctx.globalAlpha=1;
     this.ctx.drawImage(monsterkopf, 0, 560, 65, 65);
     this.ctx.drawImage(cookie3, 50,672, 50,50);
     this.ctx.drawImage(cookie3, 270,290, 50,50);
@@ -129,10 +135,18 @@ class ScoreDisplay {
     this.ctx.textAlign = "left";
     this.ctx.font = "40px Permanent Marker";
     this.ctx.fillStyle = "white";
-    this.ctx.fillText('Score:', 30, 175);
-    this.ctx.fillText(points, 250, 175);   
-
+    this.ctx.fillText('Score:', 20, 175);
+    this.ctx.fillText(points, 250, 175);  
+    //Highscore Anzeige, solange die Session aktiv ist
+    this.ctx.fillText('Highscore:', 20, 530);
+    this.ctx.fillStyle="#f2690f";
+    this.ctx.shadowOffsetX =2
+    this.ctx.shadowOffsetY =2;
+    this.ctx.shadowColor = "whitesmoke"; 
+    this.ctx.fillText(Math.max(...highscoreArray), 250, 530);
     //Bilder für hintergrund und Score eingefügt
+    this.ctx.shadowOffsetX =0
+    this.ctx.shadowOffsetY =0;
     this.ctx.drawImage(monsterkopf,220,640,70,70);
     this.ctx.drawImage(cookie3,190,142,35,35);
     
@@ -165,7 +179,7 @@ class ScoreDisplay {
     this.ctx.font = "40px Permanent Marker";
     this.ctx.fillStyle = "white";
 
-    this.ctx.fillText('Time left:', 30, 120);
+    this.ctx.fillText('Time left:', 20, 120);
     if (timer <=10){
       this.ctx.fillStyle = "#f2690f";
       this.ctx.shadowColor = "whitesmoke"; //#c3d0de
@@ -289,7 +303,8 @@ class CanvasGame {
     clearInterval(this.interval);
     //Start Game Button wieder activieren
     document.getElementById("start-game").removeAttribute("disabled");
-
+    highscoreArray.push(points);
+    
     //clearCanvas, damit Cookiemonster und das Kollisionsobjekt verschwindet
     this.clearCanvas();
 
@@ -448,7 +463,7 @@ class MovingMonster extends MovingObjects {
 
 class MovingCookies extends MovingObjects {
   constructor(xPosition, ctx) {
-    super(xPosition, 0, ctx, 50, 50);
+    super(xPosition, -40, ctx, 50, 50);
     this.ySpeed = Math.floor(Math.random()*4)+5;
     this.xPosition = xPosition;
   }
