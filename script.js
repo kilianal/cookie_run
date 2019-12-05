@@ -1,6 +1,8 @@
 let points;
 let timer;
-let lives;
+let randomFrames;
+
+
 
 //Seiten Canvas Bilder Ressourcen
 let snowflake2 = new Image();
@@ -25,7 +27,7 @@ window.onload = function () {
     startGame();
     points = 0;
     timer = 60;
-    lives = 3;
+    randomFrames = (Math.floor(Math.random() * 150)) + 125;
   };
 };
 
@@ -218,11 +220,11 @@ class CanvasGame {
     //Bedingung damit zu einer bestimmten Zeit die Obstacles ins Canvas laufen
     this.frames += 1;
 
-    let randomFrames = (Math.floor(Math.random() * 150)) + 125;
     
-    if (this.frames % randomFrames === 0) {
+    
+    if (this.frames ==randomFrames) {
       this.addFruits();
-    
+      randomFrames = this.frames + (Math.floor(Math.random() * 200)) + 70;
     }
 
     this.gamesObjects.forEach(function (gameObject) {
@@ -230,7 +232,7 @@ class CanvasGame {
     });
 
     //Bedingung damit die Cookies zu einer bestimmten Zeit runterfallen
-    if (this.frames % 50 === 0) {
+    if (this.frames % 60 === 0) {
       this.addCookies();
     }
 
@@ -254,7 +256,7 @@ class CanvasGame {
 
   //Methode damit eine Instanz unserer Cookies gemacht wird und in unser Array für die Cookies gespushed wird
   addCookies() {
-    let randomCookie = 15 + (Math.floor(Math.random() * (this.canvas.width - 80)));
+    let randomCookie = 15 + (Math.floor(Math.random() * (this.canvas.width - 100)));
     this.gamePoints.push(this.cookie = new MovingCookies(randomCookie, this.ctx));
   }
 
@@ -380,18 +382,21 @@ class MovingMonster extends MovingObjects {
 
 
     document.onkeydown = e => {
-      e.preventDefault();
+      
       switch (e.keyCode) {
         case 37:
           this.xSpeed -= 8;
+          e.preventDefault();
           break;
         case 39:
           this.xSpeed += 8;
+          e.preventDefault();
           break;
         case 32:
           this.ySpeed -= 22;
+          e.preventDefault();
           break;
-        default:
+         default:
       }
     };
     document.onkeyup = e => {
@@ -438,7 +443,7 @@ class MovingMonster extends MovingObjects {
 class MovingCookies extends MovingObjects {
   constructor(xPosition, ctx) {
     super(xPosition, 0, ctx, 50, 50);
-    this.ySpeed = 10;
+    this.ySpeed = Math.floor(Math.random()*4)+5;
     this.xPosition = xPosition;
   }
 
@@ -463,7 +468,7 @@ class MovingCookies extends MovingObjects {
 class MovingFruits extends MovingObjects {
   constructor(ctx) {
     super(900, 600, ctx, 50, 50);
-    this.xSpeed = -6;
+    this.xSpeed = -(Math.floor(Math.random()*4)+4)
     this.img = new Image();
     this.img.src = "pictures/apfel.png";
   }
