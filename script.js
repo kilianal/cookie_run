@@ -383,6 +383,7 @@ class MovingMonster extends MovingObjects {
 
 
     document.onkeydown = e => {
+      e.preventDefault();
       switch (e.keyCode) {
         case 37:
           this.xSpeed -= 8;
