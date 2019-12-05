@@ -12,6 +12,7 @@ let cookie = new Image();
 cookie.src = "pictures/cookie1.png";
 
 
+
 window.onload = function () {
   document.getElementById("start-game").onclick = function () {
     startGame();
@@ -22,7 +23,7 @@ window.onload = function () {
 
 function startGame() {
   let scoreDisplay = new ScoreDisplay(300, 700);
-  let interaction = new InteractionManual(300, 700);
+  let interaction = new InteractionManual(300, 724);
   let cookieGame = new CanvasGame(900, 700, scoreDisplay);
   let gameBoardCanvas = document.getElementById("game-board");
   let interactionCanvas = document.getElementById("interactions");
@@ -186,8 +187,58 @@ class InteractionManual {
     this.ctx = this.canvas.getContext("2d");
     this.canvas.width = width;
     this.canvas.height = height;
-    this.canvas.style = "border: 2px solid whitesmoke";
+    
+    
     document.getElementById("interactions").appendChild(this.canvas);
+
+
+    
+    this.ctx.font="45px Permanent Marker";
+    this.ctx.fillStyle="darkorange";
+    this.ctx.shadowOffsetX =2
+    this.ctx.shadowOffsetY =2;
+    this.ctx.shadowColor = "white";
+    this.ctx.fillText("Instructions", 15, 100);
+    this.ctx.font="25px Permanent Marker";
+    this.ctx.fillStyle="black";
+    this.ctx.shadowOffsetX =2
+    this.ctx.shadowOffsetY =2;
+    this.ctx.shadowColor = "white";
+    this.ctx.shadowOffsetX =0;
+    this.ctx.shadowOffsetY =0;
+    this.ctx.fillText("Catch as many cookies",15,150);
+    this.ctx.fillText("as you can and don´t", 15,180);
+    this.ctx.fillText("let yourself get hit by", 15,210);
+    this.ctx.fillText("by the incoming apples", 15, 240);
+    this.ctx.font="30px Permanent Marker";
+    this.ctx.fillStyle="darkorange";
+    this.ctx.shadowOffsetX =2
+    this.ctx.shadowOffsetY =2;
+    this.ctx.shadowColor = "white";
+    this.ctx.fillText("Game Control", 30,320);
+    this.ctx.font="25px Permanent Marker";
+    this.ctx.fillStyle="black";
+    this.ctx.shadowOffsetX =2
+    this.ctx.shadowOffsetY =2;
+    this.ctx.shadowColor = "white";
+    this.ctx.shadowOffsetX =0;
+    this.ctx.shadowOffsetY =0;
+    this.ctx.fillText("Use your keyboard to ",15,360)
+    this.ctx.fillText("move around", 60,390)
+    this.ctx.fillText("Moving left with  <<", 15,430);
+    this.ctx.fillText("Moving right with >>", 15,470);
+    this.ctx.fillText("Jumping with", 45, 510);
+    this.ctx.fillText("spacebar", 60 ,540);
+    this.ctx.shadowOffsetX =0;
+    this.ctx.shadowOffsetY =0;
+   
+    //Cookies die als Bilder angezeigt werden
+    this.ctx.drawImage(cookie, 0,550, 50,50);
+    this.ctx.drawImage(cookie, 50,672, 50,50);
+    this.ctx.drawImage(cookie, 270,290, 50,50);
+    this.ctx.drawImage(cookie, 200,600, 50,50);
+    
+
   }
 }
 
