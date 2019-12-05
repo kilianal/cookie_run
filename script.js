@@ -1,5 +1,6 @@
 let points;
 let timer;
+let lives;
 
 //Seiten Canvas Bilder Ressourcen
 let snowflake2 = new Image();
@@ -14,6 +15,9 @@ let cookie3 = new Image();
 cookie3.src = "pictures/cookie3.png";
 let monsterkopf = new Image();
 monsterkopf.src = "pictures/cookiemonster-kopf.png";
+let cookiemonster = new Image();
+cookiemonster.src = "pictures/cookiemonster.png";
+
 
 
 window.onload = function () {
@@ -21,12 +25,13 @@ window.onload = function () {
     startGame();
     points = 0;
     timer = 60;
+    lives = 3;
   };
 };
 
 function startGame() {
   let scoreDisplay = new ScoreDisplay(300, 724);
-  let interaction = new InteractionManual(300, 700);
+  let interaction = new InteractionManual(300, 724);
   let cookieGame = new CanvasGame(900, 700, scoreDisplay);
   let gameBoardCanvas = document.getElementById("game-board");
   let interactionCanvas = document.getElementById("interactions");
@@ -159,26 +164,33 @@ class CanvasGame {
       this.ctx.globalAlpha = 0.7;
       this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
       this.ctx.textAlign = "center";
+      this.ctx.globalAlpha = 0.85;
+      this.ctx.drawImage(bittenCookie,340, 35, 210,210)
       
-      this.ctx.fillStyle = "#ed7d32";
 
       //Damit die Schrift nicht auch Transparent wird muss hier nochmal die Farbe und die Transparenz wieder auf 1 gesetzt werden
       this.ctx.globalAlpha = 1;
+      this.ctx.fillStyle = "#f2690f";
       this.ctx.font = "42px Permanent Marker";
-      this.ctx.fillText("A full Monster", (this.canvas.width / 2), 300);
-      this.ctx.fillText("is a happy Monster!", (this.canvas.width / 2), 350);
-      this.ctx.fillText("Cookies eaten: " + points, (this.canvas.width / 2), 500);
-      this.ctx.font = "100px Permanent Marker";
-      this.ctx.shadowColor = "#b1bcc9";
-      this.ctx.shadowOffsetX = 7;
-      this.ctx.shadowOffsetY = 7;
-      this.ctx.shadowBlur = 3;
+      this.ctx.fillText("A full Monster", (this.canvas.width / 2), 310);
+      this.ctx.fillText("is a happy Monster!", (this.canvas.width / 2), 360);
+      this.ctx.fillText("Cookies eaten: " + points, (this.canvas.width / 2), 600);
+      this.ctx.drawImage(cookiemonster,390,420,100,115);
+      this.ctx.font = "110px Permanent Marker";
+      
+      this.ctx.shadowColor = "whitesmoke";
+      this.ctx.shadowOffsetX = 5;
+      this.ctx.shadowOffsetY = 5;
+      //this.ctx.shadowBlur = 3;
       this.ctx.fillText("WIN!", (this.canvas.width / 2), 220);
+      this.ctx.shadowColor = "#b2b8bf";
+      this.ctx.shadowBlur = 3;
+      this.ctx.drawImage(cookiemonster,390,420,100,115);
     }
 
     if (status === "lose") {
       this.ctx.font = "100px Permanent Marker";
-      this.ctx.fillStyle = "#ed7d32";
+      this.ctx.fillStyle = "#f2690f";
       this.ctx.globalAlpha = 1;
       this.ctx.shadowColor = "whitesmoke"; 
       this.ctx.shadowOffsetX = 4;
@@ -198,8 +210,59 @@ class InteractionManual {
     this.ctx = this.canvas.getContext("2d");
     this.canvas.width = width;
     this.canvas.height = height;
-    this.canvas.style = "border: 2px solid whitesmoke";
+    
+    
     document.getElementById("interactions").appendChild(this.canvas);
+
+
+    
+    this.ctx.font="45px Permanent Marker";
+    this.ctx.fillStyle="#f2690f";
+    this.ctx.shadowOffsetX =2
+    this.ctx.shadowOffsetY =2;
+    this.ctx.shadowColor = "white";
+    this.ctx.fillText("Instructions", 15, 100);
+    this.ctx.font="25px Permanent Marker";
+    this.ctx.fillStyle="black";
+    this.ctx.shadowOffsetX =2
+    this.ctx.shadowOffsetY =2;
+    this.ctx.shadowColor = "white";
+    this.ctx.shadowOffsetX =0;
+    this.ctx.shadowOffsetY =0;
+    this.ctx.fillText("Catch as many cookies",15,150);
+    this.ctx.fillText("as you can and don´t", 15,180);
+    this.ctx.fillText("let yourself get hit by", 15,210);
+    this.ctx.fillText("by the incoming apples", 15, 240);
+    this.ctx.font="30px Permanent Marker";
+    this.ctx.fillStyle="#f2690f";
+    this.ctx.shadowOffsetX =2
+    this.ctx.shadowOffsetY =2;
+    this.ctx.shadowColor = "white";
+    this.ctx.fillText("Game Control", 30,320);
+    this.ctx.font="25px Permanent Marker";
+    this.ctx.fillStyle="black";
+    this.ctx.shadowOffsetX =2
+    this.ctx.shadowOffsetY =2;
+    this.ctx.shadowColor = "white";
+    this.ctx.shadowOffsetX =0;
+    this.ctx.shadowOffsetY =0;
+    this.ctx.fillText("Use your keyboard to ",15,360)
+    this.ctx.fillText("move around", 60,390)
+    this.ctx.fillText("Moving left with  <<", 15,430);
+    this.ctx.fillText("Moving right with >>", 15,470);
+    this.ctx.fillText("Jumping with", 45, 510);
+    this.ctx.fillText("spacebar", 60 ,540);
+    this.ctx.shadowOffsetX =0;
+    this.ctx.shadowOffsetY =0;
+   
+    //Cookies die als Bilder angezeigt werden
+    this.ctx.drawImage(monsterkopf, 0, 560, 65, 65);
+    this.ctx.drawImage(cookie3, 50,672, 50,50);
+    this.ctx.drawImage(cookie3, 270,290, 50,50);
+    
+    this.ctx.drawImage(bittenCookie, 200 ,600, 50,50);
+    
+
   }
 }
 
@@ -225,8 +288,9 @@ class ScoreDisplay {
     this.ctx.fillStyle = "white";
     this.ctx.fillText('Score:', 30, 175);
     this.ctx.fillText(points, 250, 175);   
+    this.ctx.drawImage(monsterkopf,220,640,70,70);
     this.ctx.drawImage(cookie3,190,142,35,35);
-    this.ctx.drawImage(monsterkopf,220,640,70,70)
+    
 
     this.ctx.globalAlpha = 0.4;
     this.ctx.drawImage(snowflake1, 250, -10, 90, 90);
@@ -260,7 +324,7 @@ class ScoreDisplay {
 
     this.ctx.fillText('Time left:', 30, 120);
     if (timer <=10){
-      this.ctx.fillStyle = "#ed7d32";
+      this.ctx.fillStyle = "#f2690f";
       this.ctx.shadowColor = "whitesmoke"; //#c3d0de
       this.ctx.shadowOffsetX = 3;
       this.ctx.shadowOffsetY = 3;
@@ -306,8 +370,8 @@ class MovingObjects {
     return !(
       this.bottom() - 10 < object.top() ||
       this.top() > object.bottom() ||
-      this.left() > object.right() ||
-      this.right() < object.left()
+      this.left() -10 > object.right() ||
+      this.right() -10 < object.left()
     );
   }
 }
@@ -316,16 +380,15 @@ class MovingObjects {
 class MovingMonster extends MovingObjects {
   constructor(ctx) {
     super(450, 570, ctx, 80, 90);
-    this.img = new Image();
-    this.img.src = "pictures/cookiemonster_player.png";
+
 
     document.onkeydown = e => {
       switch (e.keyCode) {
         case 37:
-          this.xSpeed -= 9;
+          this.xSpeed -= 8;
           break;
         case 39:
-          this.xSpeed += 9;
+          this.xSpeed += 8;
           break;
         case 32:
           this.ySpeed -= 22;
@@ -336,7 +399,7 @@ class MovingMonster extends MovingObjects {
     document.onkeyup = e => {
       this.xSpeed = 0;
       if (this.yPosition < 570) {
-        this.ySpeed = 16;
+        this.ySpeed = 14;
       }
     };
   }
@@ -364,7 +427,7 @@ class MovingMonster extends MovingObjects {
 
   draw() {
     this.ctx.drawImage(
-      this.img,
+      cookiemonster,
       this.xPosition,
       this.yPosition,
       this.width,
