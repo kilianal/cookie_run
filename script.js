@@ -491,7 +491,11 @@ class MovingFruits extends MovingObjects {
     super(900, 600, ctx, 50, 50);
     this.xSpeed = -(Math.floor(Math.random()*4)+4)
     this.img = new Image();
-    this.img.src = "pictures/apfel.png";
+    //damit unterschiedliche Früchte erscheinen;
+	  let randomIndex= Math.floor(Math.random()*3);
+	//Array indem die Sourcen für die Bilder liegen;
+	  this.imagesArray=["pictures/apfel.png", "pictures/red-apple.png", "pictures/orange.png" ]
+    this.img.src = this.imagesArray[randomIndex];
   }
 
   update() {
